@@ -1,0 +1,21 @@
+{
+  "name": "shitty-translate",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "check": "next build"
+  },
+  "dependencies": {
+    "@ai-sdk/amazon-bedrock": "4.0.77",
+    "@ai-sdk/react": "3.0.118",
+    "ai": "6.0.116",
+    "next": "15.5.13",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  }
+}
