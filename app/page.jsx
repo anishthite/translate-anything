@@ -432,13 +432,6 @@ export default function HomePage() {
 
   return (
     <main className="page-shell">
-      <header className="app-header">
-        <div>
-          <p className="app-kicker">Translate Anything</p>
-          <h1>Translate anything</h1>
-        </div>
-      </header>
-
       <section className="translator-shell" aria-label="Translator">
         <div className="toolbar-surface">
           <div className="language-toolbar">
