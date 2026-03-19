@@ -527,7 +527,7 @@ export default function HomePage() {
       <section className="translator-shell" aria-label="Translator">
         <div className="toolbar-surface">
           <div className="toolbar-header">
-            <h1 className="toolbar-brand">Translate Anything</h1>
+            <h1 className="toolbar-brand">AnyTranslate</h1>
             <p className="toolbar-subtitle">
               Instantly translate between <em>any</em> language
             </p>
