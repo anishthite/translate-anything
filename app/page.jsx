@@ -120,24 +120,26 @@ function LanguageCombobox({
   featuredLanguages = []
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [showAllOnOpen, setShowAllOnOpen] = useState(false);
   const blurTimeoutRef = useRef(null);
 
   const filteredOptions = useMemo(() => {
     const normalized = value.trim().toLowerCase();
+    const shouldFilter = normalized.length > 0 && !showAllOnOpen;
     const baseOptions = options
       .filter((option) => {
         if (!allowAuto && option.code === "auto") {
           return false;
         }
 
-        return normalized
+        return shouldFilter
           ? option.label.toLowerCase().includes(normalized)
           : true;
       })
       .map((option) => ({
         key: option.code,
         label: option.label,
-        tone: "language"
+        selected: option.label.toLowerCase() === normalized
       }));
 
     const currentLanguageOption = options.find((option) => {
@@ -167,7 +169,7 @@ function LanguageCombobox({
 
     const presetOptions = extraOptions
       .filter((option) => {
-        if (!normalized) {
+        if (!shouldFilter) {
           return true;
         }
 
@@ -176,27 +178,33 @@ function LanguageCombobox({
       .map((option) => ({
         key: `preset-${option.label}`,
         label: option.label,
-        tone: option.tone
+        selected: option.label.toLowerCase() === normalized
       }));
 
-    const curatedLanguageOptions = normalized
-      ? baseOptions
+    const currentPresetOption = presetOptions.find(
+      (option) => option.label.toLowerCase() === normalized
+    );
+
+    const curatedOptions = shouldFilter
+      ? [...baseOptions, ...presetOptions]
       : [
           ...(currentLanguageOption
             ? [
                 {
                   key: currentLanguageOption.code,
                   label: currentLanguageOption.label,
-                  tone: "language"
+                  selected: true
                 }
               ]
             : []),
-          ...featuredLanguageOptions
+          ...(currentPresetOption ? [currentPresetOption] : []),
+          ...featuredLanguageOptions,
+          ...presetOptions
         ];
 
     const seen = new Set();
 
-    return [...curatedLanguageOptions, ...presetOptions].filter((option) => {
+    return curatedOptions.filter((option) => {
       const dedupeKey = option.label.toLowerCase();
 
       if (seen.has(dedupeKey)) {
@@ -206,7 +214,7 @@ function LanguageCombobox({
       seen.add(dedupeKey);
       return true;
     });
-  }, [allowAuto, extraOptions, featuredLanguages, options, value]);
+  }, [allowAuto, extraOptions, featuredLanguages, options, showAllOnOpen, value]);
 
   useEffect(() => {
     return () => {
@@ -233,10 +241,12 @@ function LanguageCombobox({
               window.clearTimeout(blurTimeoutRef.current);
             }
 
+            setShowAllOnOpen(true);
             setIsOpen(true);
           }}
           onChange={(event) => {
             onChange(event.target.value);
+            setShowAllOnOpen(false);
             setIsOpen(true);
           }}
           onFocus={() => {
@@ -244,10 +254,12 @@ function LanguageCombobox({
               window.clearTimeout(blurTimeoutRef.current);
             }
 
+            setShowAllOnOpen(true);
             setIsOpen(true);
           }}
           onBlur={() => {
             blurTimeoutRef.current = window.setTimeout(() => {
+              setShowAllOnOpen(false);
               setIsOpen(false);
             }, 120);
           }}
@@ -263,12 +275,14 @@ function LanguageCombobox({
               <button
                 key={option.key}
                 type="button"
-                className="language-menu-item"
+                className={`language-menu-item${option.selected ? " is-selected" : ""}`}
+                aria-selected={option.selected ? "true" : "false"}
                 onMouseDown={(event) => {
                   event.preventDefault();
                 }}
                 onClick={() => {
                   onChange(option.label);
+                  setShowAllOnOpen(false);
                   setIsOpen(false);
                 }}
               >
