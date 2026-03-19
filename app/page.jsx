@@ -467,9 +467,11 @@ export default function HomePage() {
     <main className="page-shell">
       <section className="translator-shell" aria-label="Translator">
         <div className="toolbar-surface">
-          <div className="language-toolbar">
+          <div className="toolbar-header">
             <h1 className="toolbar-brand">Translate Anything</h1>
+          </div>
 
+          <div className="language-toolbar">
             <div className="toolbar-side">
               <LanguageCombobox
                 id="sourceLanguage"
