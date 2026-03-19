@@ -185,29 +185,28 @@ textarea {
   top: calc(100% + 14px);
   left: 0;
   z-index: 5;
-  width: min(700px, calc(100vw - 72px));
+  width: min(380px, calc(100vw - 72px));
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 6px;
+  grid-template-columns: 1fr;
+  gap: 4px;
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.98);
   box-shadow: 0 24px 60px rgba(17, 34, 68, 0.14);
-  padding: 14px;
+  padding: 10px;
 }
 
 .language-menu-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: flex-start;
   width: 100%;
   border: 0;
   border-radius: 12px;
   background: transparent;
   color: var(--text);
-  font-size: 0.95rem;
-  font-weight: 500;
-  padding: 11px 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 12px 14px;
   text-align: left;
   transition: background-color 140ms ease, color 140ms ease;
 }
@@ -215,14 +214,6 @@ textarea {
 .language-menu-item:hover,
 .language-menu-item:focus-visible {
   background: rgba(26, 115, 232, 0.08);
-}
-
-.language-menu-tone {
-  color: var(--muted);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .swap-inline-button {

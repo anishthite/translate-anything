@@ -12,6 +12,8 @@ const SOURCE_FEATURED_LANGUAGES = ["Detect language", "English", "Spanish"];
 const TARGET_FEATURED_LANGUAGES = ["English", "Spanish"];
 
 const CUSTOM_PRESETS = [
+  { label: "Unreasonably confident pelican", tone: "creature" },
+  { label: "Sentient toaster", tone: "object" },
   { label: "Kirby", tone: "mascot" },
   { label: "Garry Tan", tone: "person" },
   { label: "Shakespeare on espresso", tone: "writer" },
@@ -20,12 +22,10 @@ const CUSTOM_PRESETS = [
   { label: "Medieval king issuing a decree", tone: "persona" },
   { label: "Oscar acceptance speech", tone: "performance" },
   { label: "Your friend who just got into crypto", tone: "archetype" },
-  { label: "Sentient toaster", tone: "object" },
   { label: "Microwave with strong opinions", tone: "object" },
   { label: "Corporate lawyer trying to be cool", tone: "archetype" },
   { label: "Sleepy barista at 6 a.m.", tone: "oddly specific" },
   { label: "Luxury real estate agent", tone: "persona" },
-  { label: "Unreasonably confident pelican", tone: "creature" },
   { label: "Group chat instigator", tone: "archetype" },
   { label: "Haunted customer support email", tone: "format" },
   { label: "Villain explaining the master plan", tone: "persona" },
@@ -266,7 +266,6 @@ function LanguageCombobox({
                 }}
               >
                 <span>{option.label}</span>
-                <span className="language-menu-tone">{option.tone}</span>
               </button>
             ))}
           </div>
@@ -278,7 +277,7 @@ function LanguageCombobox({
 
 export default function HomePage() {
   const [sourceInput, setSourceInput] = useState("Detect language");
-  const [targetInput, setTargetInput] = useState("Italian");
+  const [targetInput, setTargetInput] = useState("Sentient toaster");
   const [sourceText, setSourceText] = useState("");
   const [status, setStatus] = useState(createStatus("Ready when you are."));
 
