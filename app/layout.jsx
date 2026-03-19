@@ -1,9 +1,9 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Shitty Translate",
+  title: "Translate Anything",
   description:
-    "A Google Translate-style Bedrock translator built with Next.js and the Vercel AI SDK."
+    "Translate Anything is a Google Translate-style Bedrock translator built with Next.js and the Vercel AI SDK."
 };
 
 export default function RootLayout({ children }) {
