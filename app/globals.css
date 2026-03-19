@@ -72,8 +72,18 @@ textarea {
   align-items: baseline;
   flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 18px;
+  margin-bottom: 8px;
   padding-inline: 14px;
+}
+
+.toolbar-helper {
+  margin: 0 0 16px;
+  padding-inline: 14px;
+  color: color-mix(in srgb, var(--muted) 82%, white);
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.45;
 }
 
 .language-toolbar {
@@ -486,6 +496,10 @@ textarea {
     margin-bottom: 14px;
   }
 
+  .toolbar-helper {
+    margin-bottom: 14px;
+  }
+
   .language-toolbar {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -526,6 +540,12 @@ textarea {
     gap: 8px;
     margin-bottom: 14px;
     padding-inline: 4px;
+  }
+
+  .toolbar-helper {
+    margin-bottom: 12px;
+    padding-inline: 4px;
+    font-size: 0.86rem;
   }
 
   .language-toolbar {

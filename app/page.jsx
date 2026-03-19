@@ -582,6 +582,10 @@ export default function HomePage() {
             </p>
           </div>
 
+          <p className="toolbar-helper">
+            Type your own language, vibe, or character in either box.
+          </p>
+
           <div className="language-toolbar">
             <div className="toolbar-side">
               <LanguageCombobox
