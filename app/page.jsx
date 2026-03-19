@@ -623,38 +623,87 @@ export default function HomePage() {
         </div>
 
         <div className="panel-grid">
-          <article className="panel-card input-card">
-            <textarea
-              id="sourceText"
-              className="source-textarea"
-              value={sourceText}
-              onChange={(event) => setSourceText(event.target.value)}
-              placeholder="Enter text"
-              spellCheck="true"
-            />
+          <section className="panel-stack panel-stack-output">
+            <div className="mobile-language-stack">
+              <div className="mobile-language-header">
+                <span className="mobile-language-label">To</span>
 
-            <button
-              type="button"
-              className="panel-autowrite"
-              onClick={handleAutoWrite}
-              aria-label="Insert a tiny starter line"
-              data-tooltip="Insert a tiny starter line"
-            >
-              <AutoWriteIcon />
-            </button>
-          </article>
-
-          <article className="panel-card output-card">
-            {hasCompletion ? (
-              <div className="output-text">{completion}</div>
-            ) : isLoading ? (
-              <div className="output-text output-text-loading">
-                Translating...
+                <button
+                  type="button"
+                  className="swap-inline-button mobile-swap-button"
+                  onClick={handleSwap}
+                  aria-label="Swap languages"
+                  title="Swap languages"
+                >
+                  <SwapIcon />
+                </button>
               </div>
-            ) : (
-              <div className="output-placeholder">Translation</div>
-            )}
-          </article>
+
+              <LanguageCombobox
+                id="targetLanguageMobile"
+                label="To"
+                value={targetInput}
+                onChange={setTargetInput}
+                options={TARGET_LANGUAGE_OPTIONS}
+                placeholder="Choose a language or type your own"
+                extraOptions={CUSTOM_PRESETS}
+                featuredLanguages={TARGET_FEATURED_LANGUAGES}
+              />
+            </div>
+
+            <article className="panel-card output-card">
+              {hasCompletion ? (
+                <div className="output-text">{completion}</div>
+              ) : isLoading ? (
+                <div className="output-text output-text-loading">
+                  Translating...
+                </div>
+              ) : (
+                <div className="output-placeholder">Translation</div>
+              )}
+            </article>
+          </section>
+
+          <section className="panel-stack panel-stack-input">
+            <div className="mobile-language-stack">
+              <div className="mobile-language-header">
+                <span className="mobile-language-label">From</span>
+              </div>
+
+              <LanguageCombobox
+                id="sourceLanguageMobile"
+                label="From"
+                value={sourceInput}
+                onChange={setSourceInput}
+                options={LANGUAGE_OPTIONS}
+                placeholder="Detect language"
+                allowAuto
+                extraOptions={CUSTOM_PRESETS}
+                featuredLanguages={SOURCE_FEATURED_LANGUAGES}
+              />
+            </div>
+
+            <article className="panel-card input-card">
+              <textarea
+                id="sourceText"
+                className="source-textarea"
+                value={sourceText}
+                onChange={(event) => setSourceText(event.target.value)}
+                placeholder="Enter text"
+                spellCheck="true"
+              />
+
+              <button
+                type="button"
+                className="panel-autowrite"
+                onClick={handleAutoWrite}
+                aria-label="Insert a tiny starter line"
+                data-tooltip="Insert a tiny starter line"
+              >
+                <AutoWriteIcon />
+              </button>
+            </article>
+          </section>
         </div>
       </section>
 
