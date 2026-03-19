@@ -1,6 +1,7 @@
 "use client";
 
 import { useCompletion } from "@ai-sdk/react";
+import debounce from "lodash.debounce";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LANGUAGE_OPTIONS } from "../lib/languages";
 
@@ -382,6 +383,8 @@ export default function HomePage() {
   const completeRef = useRef(complete);
   const stopRef = useRef(stop);
   const setCompletionRef = useRef(setCompletion);
+  const requestTranslationRef = useRef(null);
+  const debouncedRequestRef = useRef(null);
   const lastAutoRequestRef = useRef("");
   const autoWriteIndexRef = useRef(0);
 
@@ -448,6 +451,30 @@ export default function HomePage() {
     [resolvedSource, resolvedTarget, sourceText]
   );
 
+  useEffect(() => {
+    requestTranslationRef.current = requestTranslation;
+  }, [requestTranslation]);
+
+  useEffect(() => {
+    const debouncedRequest = debounce((autoRequestKey) => {
+      if (autoRequestKey === lastAutoRequestRef.current) {
+        return;
+      }
+
+      lastAutoRequestRef.current = autoRequestKey;
+      void requestTranslationRef.current?.();
+    }, 520);
+
+    debouncedRequestRef.current = debouncedRequest;
+
+    return () => {
+      debouncedRequest.cancel();
+      if (debouncedRequestRef.current === debouncedRequest) {
+        debouncedRequestRef.current = null;
+      }
+    };
+  }, []);
+
   const handleAutoWrite = useCallback(() => {
     const nextSnippet =
       AUTO_WRITE_SNIPPETS[
@@ -455,6 +482,7 @@ export default function HomePage() {
       ];
 
     autoWriteIndexRef.current += 1;
+    debouncedRequestRef.current?.cancel();
     lastAutoRequestRef.current = "";
     stopRef.current();
     setCompletionRef.current("");
@@ -471,6 +499,7 @@ export default function HomePage() {
     ].join("::");
 
     if (!trimmedText) {
+      debouncedRequestRef.current?.cancel();
       lastAutoRequestRef.current = "";
       stopRef.current();
       setCompletionRef.current("");
@@ -482,15 +511,10 @@ export default function HomePage() {
       return;
     }
 
-    const timer = window.setTimeout(() => {
-      lastAutoRequestRef.current = autoRequestKey;
-      void requestTranslation();
-    }, 520);
-
-    return () => {
-      window.clearTimeout(timer);
-    };
-  }, [requestTranslation, resolvedSource, resolvedTarget, sourceText]);
+    debouncedRequestRef.current?.cancel();
+    stopRef.current();
+    debouncedRequestRef.current?.(autoRequestKey);
+  }, [resolvedSource, resolvedTarget, sourceText]);
 
   useEffect(() => {
     if (isLoading) {
@@ -499,6 +523,7 @@ export default function HomePage() {
   }, [isLoading]);
 
   const handleSwap = () => {
+    debouncedRequestRef.current?.cancel();
     const nextSource = targetInput.trim() || "English";
     const nextTarget =
       sourceInput.trim().toLowerCase() === "detect language"
