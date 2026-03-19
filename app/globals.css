@@ -118,15 +118,6 @@ textarea {
   background: #e9eef5;
 }
 
-.language-inline-label {
-  flex: 0 0 auto;
-  color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
 .language-combobox {
   position: relative;
   min-width: 0;
@@ -500,10 +491,6 @@ textarea {
     align-items: flex-start;
     gap: 6px;
     padding: 10px 12px;
-  }
-
-  .language-inline-label {
-    width: 100%;
   }
 
   .panel-grid {

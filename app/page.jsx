@@ -255,8 +255,6 @@ function LanguageCombobox({
 
   return (
     <div className="language-control">
-      <span className="language-inline-label">{label}</span>
-
       <div className="language-combobox">
         <input
           id={id}
@@ -265,6 +263,7 @@ function LanguageCombobox({
           value={value}
           placeholder={placeholder}
           autoComplete="off"
+          aria-label={label}
           onMouseDown={() => {
             if (blurTimeoutRef.current) {
               window.clearTimeout(blurTimeoutRef.current);
