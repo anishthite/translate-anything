@@ -54,12 +54,12 @@ textarea {
 
 .page-shell {
   min-height: 100svh;
-  padding: 18px 24px 24px;
+  padding: 30px 24px 24px;
 }
 
 .translator-shell {
   display: grid;
-  gap: 12px;
+  gap: 16px;
 }
 
 .toolbar-surface {
@@ -70,8 +70,8 @@ textarea {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 12px;
+  margin-bottom: 18px;
   padding-inline: 14px;
 }
 
@@ -85,15 +85,15 @@ textarea {
 .toolbar-brand {
   margin: 0;
   color: var(--text);
-  font-size: 1.04rem;
+  font-size: 1.42rem;
   font-weight: 800;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.045em;
 }
 
 .toolbar-subtitle {
   margin: 0;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 500;
   letter-spacing: -0.01em;
 }
@@ -401,11 +401,11 @@ textarea {
 
 @media (max-width: 980px) {
   .page-shell {
-    padding: 16px;
+    padding: 24px 16px 18px;
   }
 
   .toolbar-header {
-    margin-bottom: 10px;
+    margin-bottom: 14px;
   }
 
   .language-toolbar {
@@ -414,11 +414,11 @@ textarea {
   }
 
   .toolbar-brand {
-    font-size: 0.94rem;
+    font-size: 1.2rem;
   }
 
   .toolbar-subtitle {
-    font-size: 0.84rem;
+    font-size: 0.94rem;
   }
 
   .swap-inline-button {
@@ -437,7 +437,7 @@ textarea {
 
 @media (max-width: 640px) {
   .page-shell {
-    padding: 10px 10px 18px;
+    padding: 18px 10px 18px;
   }
 
   .toolbar-surface {
@@ -445,7 +445,8 @@ textarea {
   }
 
   .toolbar-header {
-    margin-bottom: 8px;
+    gap: 8px;
+    margin-bottom: 12px;
     padding-inline: 12px;
   }
 
