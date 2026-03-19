@@ -8,11 +8,30 @@ const TARGET_LANGUAGE_OPTIONS = LANGUAGE_OPTIONS.filter(
   (language) => language.code !== "auto"
 );
 
+const SOURCE_FEATURED_LANGUAGES = ["Detect language", "English", "Spanish"];
+const TARGET_FEATURED_LANGUAGES = ["English", "Spanish"];
+
 const CUSTOM_PRESETS = [
-  "Kirby",
-  "Stereotypical Italian man",
-  "Garry Tan",
-  "Pirate"
+  { label: "Kirby", tone: "mascot" },
+  { label: "Garry Tan", tone: "person" },
+  { label: "Shakespeare on espresso", tone: "writer" },
+  { label: "Pirate with startup ideas", tone: "oddity" },
+  { label: "Stereotypical Italian man", tone: "stereotype" },
+  { label: "Medieval king issuing a decree", tone: "persona" },
+  { label: "Oscar acceptance speech", tone: "performance" },
+  { label: "Your friend who just got into crypto", tone: "archetype" },
+  { label: "Sentient toaster", tone: "object" },
+  { label: "Microwave with strong opinions", tone: "object" },
+  { label: "Corporate lawyer trying to be cool", tone: "archetype" },
+  { label: "Sleepy barista at 6 a.m.", tone: "oddly specific" },
+  { label: "Luxury real estate agent", tone: "persona" },
+  { label: "Unreasonably confident pelican", tone: "creature" },
+  { label: "Group chat instigator", tone: "archetype" },
+  { label: "Haunted customer support email", tone: "format" },
+  { label: "Villain explaining the master plan", tone: "persona" },
+  { label: "Overcaffeinated teaching assistant", tone: "oddly specific" },
+  { label: "Meditation app voiceover", tone: "voice" },
+  { label: "A cast-iron pan that remembers everything", tone: "object" }
 ];
 
 function createStatus(text, tone = "neutral") {
@@ -97,7 +116,8 @@ function LanguageCombobox({
   options,
   placeholder,
   allowAuto = false,
-  extraOptions = []
+  extraOptions = [],
+  featuredLanguages = []
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const blurTimeoutRef = useRef(null);
@@ -110,12 +130,35 @@ function LanguageCombobox({
           return false;
         }
 
-        if (!normalized) {
-          return true;
-        }
-
-        return option.label.toLowerCase().includes(normalized);
+        return normalized
+          ? option.label.toLowerCase().includes(normalized)
+          : true;
       })
+      .map((option) => ({
+        key: option.code,
+        label: option.label,
+        tone: "language"
+      }));
+
+    const currentLanguageOption = options.find((option) => {
+      if (!allowAuto && option.code === "auto") {
+        return false;
+      }
+
+      return option.label.toLowerCase() === normalized;
+    });
+
+    const featuredLanguageOptions = featuredLanguages
+      .map((featuredLabel) =>
+        options.find((option) => {
+          if (!allowAuto && option.code === "auto") {
+            return false;
+          }
+
+          return option.label === featuredLabel;
+        })
+      )
+      .filter(Boolean)
       .map((option) => ({
         key: option.code,
         label: option.label,
@@ -128,17 +171,32 @@ function LanguageCombobox({
           return true;
         }
 
-        return option.toLowerCase().includes(normalized);
+        return option.label.toLowerCase().includes(normalized);
       })
       .map((option) => ({
-        key: `preset-${option}`,
-        label: option,
-        tone: "custom"
+        key: `preset-${option.label}`,
+        label: option.label,
+        tone: option.tone
       }));
+
+    const curatedLanguageOptions = normalized
+      ? baseOptions
+      : [
+          ...(currentLanguageOption
+            ? [
+                {
+                  key: currentLanguageOption.code,
+                  label: currentLanguageOption.label,
+                  tone: "language"
+                }
+              ]
+            : []),
+          ...featuredLanguageOptions
+        ];
 
     const seen = new Set();
 
-    return [...baseOptions, ...presetOptions].filter((option) => {
+    return [...curatedLanguageOptions, ...presetOptions].filter((option) => {
       const dedupeKey = option.label.toLowerCase();
 
       if (seen.has(dedupeKey)) {
@@ -148,7 +206,7 @@ function LanguageCombobox({
       seen.add(dedupeKey);
       return true;
     });
-  }, [allowAuto, extraOptions, options, value]);
+  }, [allowAuto, extraOptions, featuredLanguages, options, value]);
 
   useEffect(() => {
     return () => {
@@ -422,6 +480,7 @@ export default function HomePage() {
                 placeholder="Detect language"
                 allowAuto
                 extraOptions={CUSTOM_PRESETS}
+                featuredLanguages={SOURCE_FEATURED_LANGUAGES}
               />
             </div>
 
@@ -444,6 +503,7 @@ export default function HomePage() {
                 options={TARGET_LANGUAGE_OPTIONS}
                 placeholder="Choose a language or type your own"
                 extraOptions={CUSTOM_PRESETS}
+                featuredLanguages={TARGET_FEATURED_LANGUAGES}
               />
             </div>
           </div>
