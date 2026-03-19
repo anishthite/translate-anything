@@ -2,9 +2,9 @@
 
 :root {
   --font-body: "Inter", "Helvetica Neue", "Segoe UI", sans-serif;
-  --bg: #f8fbff;
+  --bg: #f6f8fc;
   --surface: #ffffff;
-  --surface-soft: #eef4ff;
+  --surface-soft: #f3f5f9;
   --line: rgba(210, 216, 226, 0.78);
   --text: #202124;
   --muted: #5f6368;
@@ -31,9 +31,7 @@ body {
 }
 
 body {
-  background:
-    radial-gradient(circle at top left, rgba(26, 115, 232, 0.08), transparent 24%),
-    linear-gradient(180deg, #fbfdff 0%, var(--bg) 100%);
+  background: linear-gradient(180deg, #fbfcfe 0%, var(--bg) 100%);
   color: var(--text);
   font-family: var(--font-body), sans-serif;
 }
@@ -292,7 +290,7 @@ textarea {
 }
 
 .output-card {
-  background: linear-gradient(180deg, #f4f7ff, #eef4ff);
+  background: linear-gradient(180deg, #f9fbff, #f3f6fb);
 }
 
 .source-textarea,
