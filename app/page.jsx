@@ -151,6 +151,16 @@ function LanguageCombobox({
   const [isOpen, setIsOpen] = useState(false);
   const [showAllOnOpen, setShowAllOnOpen] = useState(false);
   const blurTimeoutRef = useRef(null);
+  const inputRef = useRef(null);
+
+  const openCombobox = useCallback(() => {
+    if (blurTimeoutRef.current) {
+      window.clearTimeout(blurTimeoutRef.current);
+    }
+
+    setShowAllOnOpen(true);
+    setIsOpen(true);
+  }, []);
 
   const filteredOptions = useMemo(() => {
     const normalized = value.trim().toLowerCase();
@@ -254,10 +264,31 @@ function LanguageCombobox({
   }, []);
 
   return (
-    <div className="language-control">
+    <div
+      className="language-control"
+      onMouseDown={(event) => {
+        const target = event.target;
+
+        if (!(target instanceof HTMLElement)) {
+          return;
+        }
+
+        if (target.closest(".language-menu")) {
+          return;
+        }
+
+        if (target !== inputRef.current) {
+          event.preventDefault();
+          inputRef.current?.focus();
+        }
+
+        openCombobox();
+      }}
+    >
       <div className="language-combobox">
         <input
           id={id}
+          ref={inputRef}
           className="language-input"
           type="text"
           value={value}
@@ -265,12 +296,7 @@ function LanguageCombobox({
           autoComplete="off"
           aria-label={label}
           onMouseDown={() => {
-            if (blurTimeoutRef.current) {
-              window.clearTimeout(blurTimeoutRef.current);
-            }
-
-            setShowAllOnOpen(true);
-            setIsOpen(true);
+            openCombobox();
           }}
           onChange={(event) => {
             onChange(event.target.value);
@@ -278,12 +304,7 @@ function LanguageCombobox({
             setIsOpen(true);
           }}
           onFocus={() => {
-            if (blurTimeoutRef.current) {
-              window.clearTimeout(blurTimeoutRef.current);
-            }
-
-            setShowAllOnOpen(true);
-            setIsOpen(true);
+            openCombobox();
           }}
           onBlur={() => {
             blurTimeoutRef.current = window.setTimeout(() => {
