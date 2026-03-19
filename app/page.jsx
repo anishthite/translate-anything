@@ -8,9 +8,7 @@ const TARGET_LANGUAGE_OPTIONS = LANGUAGE_OPTIONS.filter(
   (language) => language.code !== "auto"
 );
 
-const SOURCE_PRESETS = ["Detect language", "English", "Spanish", "French"];
-const TARGET_PRESETS = ["English", "Italian", "Japanese", "French"];
-const FUNNY_PRESETS = [
+const CUSTOM_PRESETS = [
   "Kirby",
   "Stereotypical Italian man",
   "Garry Tan",
@@ -135,7 +133,7 @@ function LanguageCombobox({
       .map((option) => ({
         key: `preset-${option}`,
         label: option,
-        tone: "preset"
+        tone: "custom"
       }));
 
     const seen = new Set();
@@ -216,29 +214,6 @@ function LanguageCombobox({
           </div>
         ) : null}
       </div>
-    </div>
-  );
-}
-
-function PresetTabs({ items, activeValue, onPick, tone = "default" }) {
-  const normalizedActive = activeValue.trim().toLowerCase();
-
-  return (
-    <div className={`preset-tabs preset-tabs-${tone}`}>
-      {items.map((item) => {
-        const isActive = normalizedActive === item.toLowerCase();
-
-        return (
-          <button
-            key={item}
-            type="button"
-            className={`preset-tab${isActive ? " is-active" : ""}`}
-            onClick={() => onPick(item)}
-          >
-            {item}
-          </button>
-        );
-      })}
     </div>
   );
 }
@@ -444,11 +419,7 @@ export default function HomePage() {
                 options={LANGUAGE_OPTIONS}
                 placeholder="Detect language"
                 allowAuto
-              />
-              <PresetTabs
-                items={SOURCE_PRESETS}
-                activeValue={sourceInput}
-                onPick={setSourceInput}
+                extraOptions={CUSTOM_PRESETS}
               />
             </div>
 
@@ -469,25 +440,10 @@ export default function HomePage() {
                 value={targetInput}
                 onChange={setTargetInput}
                 options={TARGET_LANGUAGE_OPTIONS}
-                placeholder="Choose a language or vibe"
-                extraOptions={FUNNY_PRESETS}
-              />
-              <PresetTabs
-                items={TARGET_PRESETS}
-                activeValue={targetInput}
-                onPick={setTargetInput}
+                placeholder="Choose a language or type your own"
+                extraOptions={CUSTOM_PRESETS}
               />
             </div>
-          </div>
-
-          <div className="funny-row">
-            <span className="funny-row-label">Funny presets</span>
-            <PresetTabs
-              items={FUNNY_PRESETS}
-              activeValue={targetInput}
-              onPick={setTargetInput}
-              tone="funny"
-            />
           </div>
         </div>
 
