@@ -8,6 +8,15 @@ const TARGET_LANGUAGE_OPTIONS = LANGUAGE_OPTIONS.filter(
   (language) => language.code !== "auto"
 );
 
+const SOURCE_PRESETS = ["Detect language", "English", "Spanish", "French"];
+const TARGET_PRESETS = ["English", "Italian", "Japanese", "French"];
+const FUNNY_PRESETS = [
+  "Kirby",
+  "Stereotypical Italian man",
+  "Garry Tan",
+  "Pirate"
+];
+
 function createStatus(text, tone = "neutral") {
   return { text, tone };
 }
@@ -84,19 +93,20 @@ function SwapIcon() {
 
 function LanguageCombobox({
   id,
+  label,
   value,
   onChange,
   options,
   placeholder,
-  allowAuto = false
+  allowAuto = false,
+  extraOptions = []
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const blurTimeoutRef = useRef(null);
 
   const filteredOptions = useMemo(() => {
     const normalized = value.trim().toLowerCase();
-
-    return options
+    const baseOptions = options
       .filter((option) => {
         if (!allowAuto && option.code === "auto") {
           return false;
@@ -108,8 +118,39 @@ function LanguageCombobox({
 
         return option.label.toLowerCase().includes(normalized);
       })
-      .slice(0, 9);
-  }, [allowAuto, options, value]);
+      .map((option) => ({
+        key: option.code,
+        label: option.label,
+        tone: "language"
+      }));
+
+    const presetOptions = extraOptions
+      .filter((option) => {
+        if (!normalized) {
+          return true;
+        }
+
+        return option.toLowerCase().includes(normalized);
+      })
+      .map((option) => ({
+        key: `preset-${option}`,
+        label: option,
+        tone: "preset"
+      }));
+
+    const seen = new Set();
+
+    return [...baseOptions, ...presetOptions].filter((option) => {
+      const dedupeKey = option.label.toLowerCase();
+
+      if (seen.has(dedupeKey)) {
+        return false;
+      }
+
+      seen.add(dedupeKey);
+      return true;
+    });
+  }, [allowAuto, extraOptions, options, value]);
 
   useEffect(() => {
     return () => {
@@ -120,56 +161,84 @@ function LanguageCombobox({
   }, []);
 
   return (
-    <div className="language-combobox">
-      <input
-        id={id}
-        className="language-input"
-        type="text"
-        value={value}
-        placeholder={placeholder}
-        autoComplete="off"
-        onChange={(event) => {
-          onChange(event.target.value);
-          setIsOpen(true);
-        }}
-        onFocus={() => {
-          if (blurTimeoutRef.current) {
-            window.clearTimeout(blurTimeoutRef.current);
-          }
+    <div className="language-control">
+      <span className="language-inline-label">{label}</span>
 
-          setIsOpen(true);
-        }}
-        onBlur={() => {
-          blurTimeoutRef.current = window.setTimeout(() => {
-            setIsOpen(false);
-          }, 120);
-        }}
-      />
+      <div className="language-combobox">
+        <input
+          id={id}
+          className="language-input"
+          type="text"
+          value={value}
+          placeholder={placeholder}
+          autoComplete="off"
+          onChange={(event) => {
+            onChange(event.target.value);
+            setIsOpen(true);
+          }}
+          onFocus={() => {
+            if (blurTimeoutRef.current) {
+              window.clearTimeout(blurTimeoutRef.current);
+            }
 
-      <span className="language-input-chevron">
-        <ChevronIcon />
-      </span>
+            setIsOpen(true);
+          }}
+          onBlur={() => {
+            blurTimeoutRef.current = window.setTimeout(() => {
+              setIsOpen(false);
+            }, 120);
+          }}
+        />
 
-      {isOpen && filteredOptions.length > 0 ? (
-        <div className="language-menu" role="listbox">
-          {filteredOptions.map((option) => (
-            <button
-              key={option.code}
-              type="button"
-              className="language-menu-item"
-              onMouseDown={(event) => {
-                event.preventDefault();
-              }}
-              onClick={() => {
-                onChange(option.label);
-                setIsOpen(false);
-              }}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
-      ) : null}
+        <span className="language-input-chevron">
+          <ChevronIcon />
+        </span>
+
+        {isOpen && filteredOptions.length > 0 ? (
+          <div className="language-menu" role="listbox">
+            {filteredOptions.map((option) => (
+              <button
+                key={option.key}
+                type="button"
+                className="language-menu-item"
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                }}
+                onClick={() => {
+                  onChange(option.label);
+                  setIsOpen(false);
+                }}
+              >
+                <span>{option.label}</span>
+                <span className="language-menu-tone">{option.tone}</span>
+              </button>
+            ))}
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function PresetTabs({ items, activeValue, onPick, tone = "default" }) {
+  const normalizedActive = activeValue.trim().toLowerCase();
+
+  return (
+    <div className={`preset-tabs preset-tabs-${tone}`}>
+      {items.map((item) => {
+        const isActive = normalizedActive === item.toLowerCase();
+
+        return (
+          <button
+            key={item}
+            type="button"
+            className={`preset-tab${isActive ? " is-active" : ""}`}
+            onClick={() => onPick(item)}
+          >
+            {item}
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -237,14 +306,8 @@ export default function HomePage() {
   const stopRef = useRef(stop);
   const setCompletionRef = useRef(setCompletion);
   const lastAutoRequestRef = useRef("");
+
   const hasCompletion = completion.trim().length > 0;
-  const canSwap = Boolean(
-    resolvedTarget &&
-      resolvedTarget.kind === "language" &&
-      resolvedSource &&
-      resolvedSource.kind === "language" &&
-      resolvedSource.value !== "auto"
-  );
 
   useEffect(() => {
     completeRef.current = complete;
@@ -270,15 +333,12 @@ export default function HomePage() {
       if (!resolvedTarget) {
         stopRef.current();
         setCompletionRef.current("");
-        setStatus(createStatus("Choose a target language.", "warning"));
+        setStatus(createStatus("Choose a target.", "warning"));
         return;
       }
 
       if (
         resolvedSource &&
-        resolvedSource.kind === "language" &&
-        resolvedSource.value !== "auto" &&
-        resolvedTarget.kind === "language" &&
         resolvedSource.label.toLowerCase() === resolvedTarget.label.toLowerCase()
       ) {
         stopRef.current();
@@ -292,7 +352,14 @@ export default function HomePage() {
 
       await completeRef.current(trimmedText, {
         body: {
-          sourceLanguage: resolvedSource ? resolvedSource.value : "auto",
+          sourceLanguage:
+            resolvedSource && resolvedSource.kind === "language"
+              ? resolvedSource.value
+              : "auto",
+          sourceCustom:
+            resolvedSource && resolvedSource.kind === "custom"
+              ? resolvedSource.label
+              : "",
           targetLanguage:
             resolvedTarget.kind === "language" ? resolvedTarget.value : "en",
           customTarget:
@@ -307,7 +374,7 @@ export default function HomePage() {
     const trimmedText = sourceText.trim();
     const autoRequestKey = [
       trimmedText,
-      resolvedSource ? resolvedSource.value : "auto",
+      resolvedSource ? `${resolvedSource.kind}:${resolvedSource.value}` : "auto",
       resolvedTarget ? `${resolvedTarget.kind}:${resolvedTarget.value}` : ""
     ].join("::");
 
@@ -340,98 +407,119 @@ export default function HomePage() {
   }, [isLoading]);
 
   const handleSwap = () => {
-    if (
-      !resolvedSource ||
-      !resolvedTarget ||
-      resolvedSource.kind !== "language" ||
-      resolvedTarget.kind !== "language" ||
-      resolvedSource.value === "auto"
-    ) {
-      return;
-    }
+    const nextSource = targetInput.trim() || "English";
+    const nextTarget =
+      sourceInput.trim().toLowerCase() === "detect language"
+        ? "English"
+        : sourceInput.trim() || "English";
 
-    setSourceInput(resolvedTarget.label);
-    setTargetInput(resolvedSource.label);
+    lastAutoRequestRef.current = "";
+    setSourceInput(nextSource);
+    setTargetInput(nextTarget);
 
     if (hasCompletion) {
       const previousText = sourceText;
       setSourceText(completion);
       setCompletionRef.current(previousText);
     }
+
+    if (sourceInput.trim().toLowerCase() === "detect language") {
+      setStatus(
+        createStatus("Swapped. Target reset to English from auto-detect.")
+      );
+    }
   };
 
   return (
     <main className="page-shell">
-      <header className="page-header">
-        <h1>Translate anything</h1>
+      <header className="app-header">
+        <div>
+          <p className="app-kicker">Translate Anything</p>
+          <h1>Translate anything</h1>
+        </div>
       </header>
 
       <section className="translator-shell" aria-label="Translator">
-        <div className="toolbar-rail">
-          <div className="toolbar-group">
-            <label className="toolbar-label" htmlFor="sourceLanguage">
-              From
-            </label>
-            <LanguageCombobox
-              id="sourceLanguage"
-              value={sourceInput}
-              onChange={setSourceInput}
-              options={LANGUAGE_OPTIONS}
-              placeholder="Detect language"
-              allowAuto
-            />
+        <div className="toolbar-surface">
+          <div className="language-toolbar">
+            <div className="toolbar-side">
+              <LanguageCombobox
+                id="sourceLanguage"
+                label="From"
+                value={sourceInput}
+                onChange={setSourceInput}
+                options={LANGUAGE_OPTIONS}
+                placeholder="Detect language"
+                allowAuto
+              />
+              <PresetTabs
+                items={SOURCE_PRESETS}
+                activeValue={sourceInput}
+                onPick={setSourceInput}
+              />
+            </div>
+
+            <button
+              type="button"
+              className="swap-inline-button"
+              onClick={handleSwap}
+              aria-label="Swap languages"
+              title="Swap languages"
+            >
+              <SwapIcon />
+            </button>
+
+            <div className="toolbar-side">
+              <LanguageCombobox
+                id="targetLanguage"
+                label="To"
+                value={targetInput}
+                onChange={setTargetInput}
+                options={TARGET_LANGUAGE_OPTIONS}
+                placeholder="Choose a language or vibe"
+                extraOptions={FUNNY_PRESETS}
+              />
+              <PresetTabs
+                items={TARGET_PRESETS}
+                activeValue={targetInput}
+                onPick={setTargetInput}
+              />
+            </div>
           </div>
 
-          <button
-            type="button"
-            className="swap-inline-button"
-            onClick={handleSwap}
-            disabled={!canSwap}
-            aria-label="Swap languages"
-            title="Swap languages"
-          >
-            <SwapIcon />
-          </button>
-
-          <div className="toolbar-group toolbar-group-right">
-            <label className="toolbar-label" htmlFor="targetLanguage">
-              To
-            </label>
-            <LanguageCombobox
-              id="targetLanguage"
-              value={targetInput}
-              onChange={setTargetInput}
-              options={TARGET_LANGUAGE_OPTIONS}
-              placeholder="Choose a language"
+          <div className="funny-row">
+            <span className="funny-row-label">Funny presets</span>
+            <PresetTabs
+              items={FUNNY_PRESETS}
+              activeValue={targetInput}
+              onPick={setTargetInput}
+              tone="funny"
             />
           </div>
         </div>
 
         <div className="panel-grid">
-          <article className="split-panel source-panel">
-            <label className="sr-only" htmlFor="sourceText">
-              Source text
-            </label>
+          <article className="panel-card input-card">
             <textarea
               id="sourceText"
               className="source-textarea"
               value={sourceText}
               onChange={(event) => setSourceText(event.target.value)}
-              placeholder="Start typing something..."
+              placeholder="Enter text"
               spellCheck="true"
             />
           </article>
 
-          <article className="split-panel output-panel">
-            <div className={`output-stage${!hasCompletion ? " is-empty" : ""}`}>
-              {hasCompletion ? (
-                <div className="output-text">{completion}</div>
-              ) : isLoading ? (
-                <div className="output-text output-text-loading">
-                  Translating...
-                </div>
-              ) : null}
-            </div>
+          <article className="panel-card output-card">
+            {hasCompletion ? (
+              <div className="output-text">{completion}</div>
+            ) : isLoading ? (
+              <div className="output-text output-text-loading">
+                Translating...
+              </div>
+            ) : (
+              <div className="output-placeholder">Translation</div>
+            )}
           </article>
         </div>
       </section>

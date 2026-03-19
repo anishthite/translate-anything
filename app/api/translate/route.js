@@ -10,13 +10,22 @@ const DEFAULT_MODEL_ID =
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
-function buildPrompt({ prompt, sourceLanguage, targetLanguage, customTarget }) {
+function buildPrompt({
+  prompt,
+  sourceLanguage,
+  sourceCustom,
+  targetLanguage,
+  customTarget
+}) {
   const sourceLabel = getLanguageLabel(sourceLanguage || "auto");
+  const sourceCustomLabel = (sourceCustom || "").trim();
   const targetLabel = getLanguageLabel(targetLanguage || "it");
   const customLabel = (customTarget || "").trim();
 
   return [
-    sourceLabel === "Detect language"
+    sourceCustomLabel
+      ? `Interpret the source as being written in this language, style, or persona: ${sourceCustomLabel}.`
+      : sourceLabel === "Detect language"
       ? "Detect the source language from the user's text."
       : `The source language is ${sourceLabel}.`,
     customLabel
@@ -51,6 +60,8 @@ export async function POST(request) {
       typeof body.prompt === "string" ? body.prompt.trim() : "";
     const sourceLanguage =
       typeof body.sourceLanguage === "string" ? body.sourceLanguage : "auto";
+    const sourceCustom =
+      typeof body.sourceCustom === "string" ? body.sourceCustom.trim() : "";
     const targetLanguage =
       typeof body.targetLanguage === "string" ? body.targetLanguage : "it";
     const customTarget =
@@ -65,6 +76,7 @@ export async function POST(request) {
     }
 
     if (
+      !sourceCustom &&
       !customTarget &&
       sourceLanguage !== "auto" &&
       sourceLanguage === targetLanguage
@@ -84,6 +96,7 @@ export async function POST(request) {
       prompt: buildPrompt({
         prompt,
         sourceLanguage,
+        sourceCustom,
         targetLanguage,
         customTarget
       }),
