@@ -111,6 +111,10 @@ textarea {
   min-width: 0;
 }
 
+.toolbar-side-target .language-control {
+  background: #e2e8f0;
+}
+
 .language-control {
   display: flex;
   align-items: center;
@@ -283,6 +287,10 @@ textarea {
   display: none !important;
 }
 
+.mobile-language-stack-target .language-control {
+  background: #e2e8f0;
+}
+
 .mobile-language-header {
   display: flex;
   align-items: center;
@@ -322,7 +330,7 @@ textarea {
 }
 
 .output-card {
-  background: var(--surface-soft);
+  background: #e2e8f0;
 }
 
 .source-textarea,

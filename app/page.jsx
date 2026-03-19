@@ -607,7 +607,7 @@ export default function HomePage() {
               <SwapIcon />
             </button>
 
-            <div className="toolbar-side">
+            <div className="toolbar-side toolbar-side-target">
               <LanguageCombobox
                 id="targetLanguage"
                 label="To"
@@ -665,7 +665,7 @@ export default function HomePage() {
           </section>
 
           <section className="panel-stack panel-stack-output">
-            <div className="mobile-language-stack">
+            <div className="mobile-language-stack mobile-language-stack-target">
               <div className="mobile-language-header">
                 <span className="mobile-language-label">To</span>
 
