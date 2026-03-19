@@ -115,7 +115,7 @@ textarea {
   min-width: 0;
   padding: 12px 14px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.54);
+  background: #e9eef5;
 }
 
 .language-inline-label {
@@ -254,15 +254,11 @@ textarea {
   height: 38px;
   border: 0;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.78);
+  background: transparent;
   color: var(--muted);
   margin-top: 0;
-  box-shadow: 0 8px 22px rgba(49, 74, 117, 0.08);
-  transition:
-    color 140ms ease,
-    background-color 140ms ease,
-    box-shadow 140ms ease,
-    transform 140ms ease;
+  box-shadow: none;
+  transition: color 140ms ease, transform 140ms ease;
 }
 
 .swap-inline-button svg {
@@ -275,8 +271,6 @@ textarea {
 .swap-inline-button:hover,
 .swap-inline-button:focus-visible {
   color: var(--accent);
-  background: rgba(26, 115, 232, 0.06);
-  box-shadow: 0 12px 28px rgba(32, 70, 131, 0.14);
   transform: translateY(-1px);
 }
 
@@ -293,11 +287,11 @@ textarea {
   border-radius: var(--radius-lg);
   background: var(--surface);
   padding: 18px 20px;
-  box-shadow: var(--card-shadow);
+  box-shadow: none;
 }
 
 .output-card {
-  background: linear-gradient(180deg, #f9fbff, #f3f6fb);
+  background: #eef3f8;
 }
 
 .source-textarea,
