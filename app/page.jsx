@@ -34,6 +34,15 @@ const CUSTOM_PRESETS = [
   { label: "A cast-iron pan that remembers everything", tone: "object" }
 ];
 
+const AUTO_WRITE_SNIPPETS = [
+  "I think the toaster is quietly judging me.",
+  "This meeting could have been a suspiciously short email.",
+  "The pelican knows something we don't.",
+  "I am trying to stay calm, but the vibes are complicated.",
+  "Please rewrite this like a villain revealing the master plan.",
+  "Nobody prepared me for how weird today was going to be."
+];
+
 function createStatus(text, tone = "neutral") {
   return { text, tone };
 }
@@ -103,6 +112,21 @@ function SwapIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="1.6"
+      />
+    </svg>
+  );
+}
+
+function AutoWriteIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <path
+        d="M12.5 3.5l4 4m-9.75 9.25l2.95-.55a2 2 0 0 0 1.03-.55l5.72-5.72a1.5 1.5 0 0 0 0-2.12l-1.32-1.31a1.5 1.5 0 0 0-2.12 0l-5.72 5.72a2 2 0 0 0-.55 1.03L6.75 16.75zM5 4.75h1.5M4.25 7H7m8.25 6.25h1.5M13 14.75h2.75"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
       />
     </svg>
   );
@@ -359,6 +383,7 @@ export default function HomePage() {
   const stopRef = useRef(stop);
   const setCompletionRef = useRef(setCompletion);
   const lastAutoRequestRef = useRef("");
+  const autoWriteIndexRef = useRef(0);
 
   const hasCompletion = completion.trim().length > 0;
 
@@ -422,6 +447,20 @@ export default function HomePage() {
     },
     [resolvedSource, resolvedTarget, sourceText]
   );
+
+  const handleAutoWrite = useCallback(() => {
+    const nextSnippet =
+      AUTO_WRITE_SNIPPETS[
+        autoWriteIndexRef.current % AUTO_WRITE_SNIPPETS.length
+      ];
+
+    autoWriteIndexRef.current += 1;
+    lastAutoRequestRef.current = "";
+    stopRef.current();
+    setCompletionRef.current("");
+    setSourceText(nextSnippet);
+    setStatus(createStatus("Dropped in a tiny starter.", "neutral"));
+  }, []);
 
   useEffect(() => {
     const trimmedText = sourceText.trim();
@@ -544,6 +583,17 @@ export default function HomePage() {
               placeholder="Enter text"
               spellCheck="true"
             />
+
+            <button
+              type="button"
+              className="panel-autowrite"
+              onClick={handleAutoWrite}
+              aria-label="Insert a prewritten starter"
+              title="Insert a prewritten starter"
+            >
+              <AutoWriteIcon />
+              <span>Autowrite</span>
+            </button>
           </article>
 
           <article className="panel-card output-card">
@@ -556,6 +606,17 @@ export default function HomePage() {
             ) : (
               <div className="output-placeholder">Translation</div>
             )}
+
+            <button
+              type="button"
+              className="panel-autowrite panel-autowrite-ghost"
+              onClick={handleAutoWrite}
+              aria-label="Insert a prewritten starter"
+              title="Insert a prewritten starter"
+            >
+              <AutoWriteIcon />
+              <span>Autowrite</span>
+            </button>
           </article>
         </div>
       </section>

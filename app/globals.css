@@ -283,6 +283,7 @@ textarea {
 }
 
 .panel-card {
+  position: relative;
   min-height: 380px;
   border-radius: var(--radius-lg);
   background: var(--surface);
@@ -299,6 +300,7 @@ textarea {
 .output-placeholder {
   width: 100%;
   height: 100%;
+  padding-bottom: 56px;
 }
 
 .source-textarea {
@@ -340,6 +342,47 @@ textarea {
   font-size: clamp(1.7rem, 4vw, 2.2rem);
   font-weight: 400;
   padding-top: 4px;
+}
+
+.panel-autowrite {
+  position: absolute;
+  right: 18px;
+  bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  color: rgba(95, 99, 104, 0.86);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  padding: 8px 12px;
+  box-shadow: 0 10px 24px rgba(49, 74, 117, 0.08);
+  transition:
+    background-color 140ms ease,
+    box-shadow 140ms ease,
+    color 140ms ease,
+    transform 140ms ease;
+}
+
+.panel-autowrite svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
+
+.panel-autowrite:hover,
+.panel-autowrite:focus-visible {
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--text);
+  box-shadow: 0 14px 28px rgba(49, 74, 117, 0.12);
+  transform: translateY(-1px);
+}
+
+.panel-autowrite-ghost {
+  background: rgba(244, 247, 255, 0.88);
 }
 
 .status-banner {
@@ -426,6 +469,12 @@ textarea {
   .panel-card {
     min-height: 240px;
     padding: 16px;
+  }
+
+  .panel-autowrite {
+    right: 14px;
+    bottom: 14px;
+    padding: 7px 10px;
   }
 
   .source-textarea,
