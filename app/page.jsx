@@ -578,7 +578,7 @@ export default function HomePage() {
           <div className="toolbar-header">
             <h1 className="toolbar-brand">AnyTranslate</h1>
             <p className="toolbar-subtitle">
-              Instantly translate between <em>any</em> language
+              Instantly translate between <em>any</em> language, real or fake
             </p>
           </div>
 
