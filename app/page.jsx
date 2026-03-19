@@ -614,7 +614,7 @@ export default function HomePage() {
               className="panel-autowrite"
               onClick={handleAutoWrite}
               aria-label="Insert a tiny starter line"
-              title="Insert a tiny starter line"
+              data-tooltip="Insert a tiny starter line"
             >
               <AutoWriteIcon />
             </button>
