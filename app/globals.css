@@ -76,7 +76,7 @@ textarea {
 
 .toolbar-header {
   margin-bottom: 12px;
-  padding-inline: 2px;
+  padding-inline: 14px;
 }
 
 .language-toolbar {
@@ -384,6 +384,7 @@ textarea {
 
   .toolbar-header {
     margin-bottom: 8px;
+    padding-inline: 12px;
   }
 
   .language-control {
