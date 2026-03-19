@@ -1,6 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=ADLaM+Display&family=Inter:wght@400;500;600;700;800&display=swap");
 
 :root {
+  --font-display: "ADLaM Display", sans-serif;
   --font-body: "Inter", "Helvetica Neue", "Segoe UI", sans-serif;
   --bg: #f2ebdf;
   --surface: #fffaf3;
@@ -85,16 +86,18 @@ textarea {
 .toolbar-brand {
   margin: 0;
   color: var(--text);
+  font-family: var(--font-display), sans-serif;
   font-size: 1.42rem;
-  font-weight: 800;
-  letter-spacing: -0.045em;
+  font-weight: 400;
+  letter-spacing: -0.02em;
 }
 
 .toolbar-subtitle {
   margin: 0;
   color: var(--muted);
+  font-family: var(--font-display), sans-serif;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.01em;
 }
 
