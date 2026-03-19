@@ -623,47 +623,6 @@ export default function HomePage() {
         </div>
 
         <div className="panel-grid">
-          <section className="panel-stack panel-stack-output">
-            <div className="mobile-language-stack">
-              <div className="mobile-language-header">
-                <span className="mobile-language-label">To</span>
-
-                <button
-                  type="button"
-                  className="swap-inline-button mobile-swap-button"
-                  onClick={handleSwap}
-                  aria-label="Swap languages"
-                  title="Swap languages"
-                >
-                  <SwapIcon />
-                </button>
-              </div>
-
-              <LanguageCombobox
-                id="targetLanguageMobile"
-                label="To"
-                value={targetInput}
-                onChange={setTargetInput}
-                options={TARGET_LANGUAGE_OPTIONS}
-                placeholder="Choose a language or type your own"
-                extraOptions={CUSTOM_PRESETS}
-                featuredLanguages={TARGET_FEATURED_LANGUAGES}
-              />
-            </div>
-
-            <article className="panel-card output-card">
-              {hasCompletion ? (
-                <div className="output-text">{completion}</div>
-              ) : isLoading ? (
-                <div className="output-text output-text-loading">
-                  Translating...
-                </div>
-              ) : (
-                <div className="output-placeholder">Translation</div>
-              )}
-            </article>
-          </section>
-
           <section className="panel-stack panel-stack-input">
             <div className="mobile-language-stack">
               <div className="mobile-language-header">
@@ -702,6 +661,47 @@ export default function HomePage() {
               >
                 <AutoWriteIcon />
               </button>
+            </article>
+          </section>
+
+          <section className="panel-stack panel-stack-output">
+            <div className="mobile-language-stack">
+              <div className="mobile-language-header">
+                <span className="mobile-language-label">To</span>
+
+                <button
+                  type="button"
+                  className="swap-inline-button mobile-swap-button"
+                  onClick={handleSwap}
+                  aria-label="Swap languages"
+                  title="Swap languages"
+                >
+                  <SwapIcon />
+                </button>
+              </div>
+
+              <LanguageCombobox
+                id="targetLanguageMobile"
+                label="To"
+                value={targetInput}
+                onChange={setTargetInput}
+                options={TARGET_LANGUAGE_OPTIONS}
+                placeholder="Choose a language or type your own"
+                extraOptions={CUSTOM_PRESETS}
+                featuredLanguages={TARGET_FEATURED_LANGUAGES}
+              />
+            </div>
+
+            <article className="panel-card output-card">
+              {hasCompletion ? (
+                <div className="output-text">{completion}</div>
+              ) : isLoading ? (
+                <div className="output-text output-text-loading">
+                  Translating...
+                </div>
+              ) : (
+                <div className="output-placeholder">Translation</div>
+              )}
             </article>
           </section>
         </div>

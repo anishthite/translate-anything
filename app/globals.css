@@ -279,16 +279,8 @@ textarea {
   min-width: 0;
 }
 
-.panel-stack-input {
-  order: 1;
-}
-
-.panel-stack-output {
-  order: 2;
-}
-
 .mobile-language-stack {
-  display: none;
+  display: none !important;
 }
 
 .mobile-language-header {
@@ -537,10 +529,12 @@ textarea {
   }
 
   .language-toolbar {
-    display: none;
+    display: none !important;
   }
 
   .panel-grid {
+    display: flex;
+    flex-direction: column;
     gap: 18px;
     padding: 0;
   }
@@ -559,7 +553,7 @@ textarea {
   }
 
   .mobile-language-stack {
-    display: grid;
+    display: grid !important;
     gap: 8px;
     padding-inline: 4px;
   }
