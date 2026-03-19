@@ -76,9 +76,18 @@ textarea {
 
 .language-toolbar {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
   gap: 12px;
   align-items: center;
+}
+
+.toolbar-brand {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.98rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
 }
 
 .toolbar-side {
@@ -318,6 +327,11 @@ textarea {
   .language-toolbar {
     grid-template-columns: 1fr;
     gap: 10px;
+  }
+
+  .toolbar-brand {
+    justify-self: center;
+    font-size: 0.94rem;
   }
 
   .swap-inline-button {
