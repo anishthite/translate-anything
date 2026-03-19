@@ -111,10 +111,6 @@ textarea {
   min-width: 0;
 }
 
-.toolbar-side-target .language-control {
-  background: #e2e8f0;
-}
-
 .language-control {
   display: flex;
   align-items: center;
@@ -285,10 +281,6 @@ textarea {
 
 .mobile-language-stack {
   display: none !important;
-}
-
-.mobile-language-stack-target .language-control {
-  background: #e2e8f0;
 }
 
 .mobile-language-header {
