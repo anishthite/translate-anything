@@ -469,6 +469,9 @@ export default function HomePage() {
         <div className="toolbar-surface">
           <div className="toolbar-header">
             <h1 className="toolbar-brand">Translate Anything</h1>
+            <p className="toolbar-subtitle">
+              Translate between <em>any</em> language
+            </p>
           </div>
 
           <div className="language-toolbar">
