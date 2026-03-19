@@ -13,6 +13,10 @@ const SOURCE_FEATURED_LANGUAGES = ["Detect language", "English", "Spanish"];
 const TARGET_FEATURED_LANGUAGES = ["English", "Spanish"];
 
 const CUSTOM_PRESETS = [
+  { label: "LinkedIn", tone: "platform" },
+  { label: "Reddit", tone: "platform" },
+  { label: "Facebook boomer", tone: "internet" },
+  { label: "Brainrotted gen alpha", tone: "internet" },
   { label: "Unreasonably confident pelican", tone: "creature" },
   { label: "Sentient toaster", tone: "object" },
   { label: "Kirby", tone: "mascot" },
