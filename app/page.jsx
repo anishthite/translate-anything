@@ -228,6 +228,13 @@ function LanguageCombobox({
           value={value}
           placeholder={placeholder}
           autoComplete="off"
+          onMouseDown={() => {
+            if (blurTimeoutRef.current) {
+              window.clearTimeout(blurTimeoutRef.current);
+            }
+
+            setIsOpen(true);
+          }}
           onChange={(event) => {
             onChange(event.target.value);
             setIsOpen(true);
