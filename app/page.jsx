@@ -588,11 +588,10 @@ export default function HomePage() {
               type="button"
               className="panel-autowrite"
               onClick={handleAutoWrite}
-              aria-label="Insert a prewritten starter"
-              title="Insert a prewritten starter"
+              aria-label="Insert a tiny starter line"
+              title="Insert a tiny starter line"
             >
               <AutoWriteIcon />
-              <span>Autowrite</span>
             </button>
           </article>
 
@@ -606,17 +605,6 @@ export default function HomePage() {
             ) : (
               <div className="output-placeholder">Translation</div>
             )}
-
-            <button
-              type="button"
-              className="panel-autowrite panel-autowrite-ghost"
-              onClick={handleAutoWrite}
-              aria-label="Insert a prewritten starter"
-              title="Insert a prewritten starter"
-            >
-              <AutoWriteIcon />
-              <span>Autowrite</span>
-            </button>
           </article>
         </div>
       </section>

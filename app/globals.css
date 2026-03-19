@@ -344,18 +344,16 @@ textarea {
   position: absolute;
   right: 18px;
   bottom: 16px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
   border: 0;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.78);
-  color: rgba(95, 99, 104, 0.86);
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  padding: 8px 12px;
-  box-shadow: 0 10px 24px rgba(49, 74, 117, 0.08);
+  background: rgba(244, 246, 251, 0.9);
+  color: rgba(95, 99, 104, 0.7);
+  padding: 0;
+  box-shadow: 0 8px 20px rgba(49, 74, 117, 0.06);
   transition:
     background-color 140ms ease,
     box-shadow 140ms ease,
@@ -364,21 +362,17 @@ textarea {
 }
 
 .panel-autowrite svg {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   display: block;
 }
 
 .panel-autowrite:hover,
 .panel-autowrite:focus-visible {
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.98);
   color: var(--text);
-  box-shadow: 0 14px 28px rgba(49, 74, 117, 0.12);
+  box-shadow: 0 12px 26px rgba(49, 74, 117, 0.1);
   transform: translateY(-1px);
-}
-
-.panel-autowrite-ghost {
-  background: rgba(244, 247, 255, 0.88);
 }
 
 .status-banner {
@@ -470,7 +464,8 @@ textarea {
   .panel-autowrite {
     right: 14px;
     bottom: 14px;
-    padding: 7px 10px;
+    width: 32px;
+    height: 32px;
   }
 
   .source-textarea,
