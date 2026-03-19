@@ -324,15 +324,17 @@ textarea {
 
 .output-text-loading,
 .output-placeholder {
-  color: rgba(95, 99, 104, 0.8);
+  color: rgba(95, 99, 104, 0.55);
 }
 
 .output-placeholder {
   display: flex;
   align-items: flex-start;
-  font-size: clamp(1.7rem, 4vw, 2.2rem);
-  font-weight: 400;
-  padding-top: 4px;
+  font-size: clamp(1.15rem, 2vw, 1.6rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.45;
+  padding-top: 2px;
 }
 
 .panel-autowrite {
