@@ -72,18 +72,8 @@ textarea {
   align-items: baseline;
   flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 18px;
   padding-inline: 14px;
-}
-
-.toolbar-helper {
-  margin: 0 0 16px;
-  padding-inline: 14px;
-  color: color-mix(in srgb, var(--muted) 82%, white);
-  font-size: 0.92rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  line-height: 1.45;
 }
 
 .language-toolbar {
@@ -139,6 +129,10 @@ textarea {
   padding-right: 22px;
 }
 
+.language-combobox.has-clear {
+  padding-right: 48px;
+}
+
 .language-input {
   width: 100%;
   border: 0;
@@ -171,6 +165,38 @@ textarea {
   transform: translateY(-50%);
 }
 
+.language-clear-button {
+  position: absolute;
+  top: 50%;
+  right: 22px;
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: color-mix(in srgb, var(--muted) 78%, white);
+  padding: 0;
+  transform: translateY(-50%);
+  transition: color 120ms ease;
+}
+
+.language-clear-button:hover,
+.language-clear-button:focus-visible {
+  color: var(--text);
+}
+
+.language-clear-button:focus-visible {
+  outline: none;
+}
+
+.language-clear-button svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+}
+
 .language-input-chevron svg {
   display: block;
   width: 100%;
@@ -197,6 +223,16 @@ textarea {
     0 8px 18px rgba(15, 23, 42, 0.04);
   backdrop-filter: blur(18px);
   padding: 10px;
+}
+
+.language-menu-note {
+  margin: 0;
+  padding: 4px 14px 8px;
+  color: color-mix(in srgb, var(--muted) 84%, white);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
 }
 
 .language-menu-item {
@@ -496,10 +532,6 @@ textarea {
     margin-bottom: 14px;
   }
 
-  .toolbar-helper {
-    margin-bottom: 14px;
-  }
-
   .language-toolbar {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -540,12 +572,6 @@ textarea {
     gap: 8px;
     margin-bottom: 14px;
     padding-inline: 4px;
-  }
-
-  .toolbar-helper {
-    margin-bottom: 12px;
-    padding-inline: 4px;
-    font-size: 0.86rem;
   }
 
   .language-toolbar {

@@ -107,6 +107,21 @@ function ChevronIcon() {
   );
 }
 
+function ClearIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path
+        d="M5 5l6 6M11 5l-6 6"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.6"
+      />
+    </svg>
+  );
+}
+
 function SwapIcon() {
   return (
     <svg viewBox="0 0 20 20" aria-hidden="true">
@@ -152,6 +167,12 @@ function LanguageCombobox({
   const [showAllOnOpen, setShowAllOnOpen] = useState(false);
   const blurTimeoutRef = useRef(null);
   const inputRef = useRef(null);
+  const trimmedValue = value.trim();
+  const normalized = trimmedValue.toLowerCase();
+  const defaultValue = allowAuto ? "Detect language" : "";
+  const showClearButton =
+    trimmedValue.length > 0 &&
+    (!allowAuto || normalized !== "detect language");
 
   const openCombobox = useCallback(() => {
     if (blurTimeoutRef.current) {
@@ -163,7 +184,6 @@ function LanguageCombobox({
   }, []);
 
   const filteredOptions = useMemo(() => {
-    const normalized = value.trim().toLowerCase();
     const shouldFilter = normalized.length > 0 && !showAllOnOpen;
     const baseOptions = options
       .filter((option) => {
@@ -223,10 +243,26 @@ function LanguageCombobox({
     const currentPresetOption = presetOptions.find(
       (option) => option.label.toLowerCase() === normalized
     );
+    const hasExactOptionMatch =
+      Boolean(currentLanguageOption) || Boolean(currentPresetOption);
+    const customEntryOption =
+      trimmedValue && !hasExactOptionMatch
+        ? {
+            key: `custom-${trimmedValue}`,
+            label: `Use "${trimmedValue}"`,
+            selected: false,
+            value: trimmedValue
+          }
+        : null;
 
     const curatedOptions = shouldFilter
-      ? [...baseOptions, ...presetOptions]
+      ? [
+          ...(customEntryOption ? [customEntryOption] : []),
+          ...baseOptions,
+          ...presetOptions
+        ]
       : [
+          ...(customEntryOption ? [customEntryOption] : []),
           ...(currentLanguageOption
             ? [
                 {
@@ -253,7 +289,15 @@ function LanguageCombobox({
       seen.add(dedupeKey);
       return true;
     });
-  }, [allowAuto, extraOptions, featuredLanguages, options, showAllOnOpen, value]);
+  }, [
+    allowAuto,
+    extraOptions,
+    featuredLanguages,
+    normalized,
+    options,
+    showAllOnOpen,
+    trimmedValue
+  ]);
 
   useEffect(() => {
     return () => {
@@ -285,7 +329,9 @@ function LanguageCombobox({
         openCombobox();
       }}
     >
-      <div className="language-combobox">
+      <div
+        className={`language-combobox${showClearButton ? " has-clear" : ""}`}
+      >
         <input
           id={id}
           ref={inputRef}
@@ -314,12 +360,35 @@ function LanguageCombobox({
           }}
         />
 
+        {showClearButton ? (
+          <button
+            type="button"
+            className="language-clear-button"
+            aria-label={`Clear ${label}`}
+            onMouseDown={(event) => {
+              event.preventDefault();
+            }}
+            onClick={() => {
+              onChange(defaultValue);
+              setShowAllOnOpen(true);
+              setIsOpen(true);
+              inputRef.current?.focus();
+            }}
+          >
+            <ClearIcon />
+          </button>
+        ) : null}
+
         <span className="language-input-chevron">
           <ChevronIcon />
         </span>
 
         {isOpen && filteredOptions.length > 0 ? (
           <div className="language-menu" role="listbox">
+            <p className="language-menu-note">
+              Type your own language, vibe, or character.
+            </p>
+
             {filteredOptions.map((option) => (
               <button
                 key={option.key}
@@ -330,7 +399,7 @@ function LanguageCombobox({
                   event.preventDefault();
                 }}
                 onClick={() => {
-                  onChange(option.label);
+                  onChange(option.value || option.label);
                   setShowAllOnOpen(false);
                   setIsOpen(false);
                 }}
@@ -581,10 +650,6 @@ export default function HomePage() {
               Instantly translate between <em>any</em> language, real or fake
             </p>
           </div>
-
-          <p className="toolbar-helper">
-            Type your own language, vibe, or character in either box.
-          </p>
 
           <div className="language-toolbar">
             <div className="toolbar-side">
