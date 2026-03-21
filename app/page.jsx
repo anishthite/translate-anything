@@ -13,6 +13,8 @@ const SOURCE_FEATURED_LANGUAGES = ["Detect language", "English", "Spanish"];
 const TARGET_FEATURED_LANGUAGES = ["English", "Spanish"];
 
 const CUSTOM_PRESETS = [
+  { label: "Garry Tan", tone: "person" },
+  { label: "OpenClaw guy", tone: "oddity" },
   { label: "LinkedIn", tone: "platform" },
   { label: "Reddit", tone: "platform" },
   { label: "Facebook boomer", tone: "internet" },
@@ -20,7 +22,6 @@ const CUSTOM_PRESETS = [
   { label: "Unreasonably confident pelican", tone: "creature" },
   { label: "Sentient toaster", tone: "object" },
   { label: "Kirby", tone: "mascot" },
-  { label: "Garry Tan", tone: "person" },
   { label: "Shakespeare on espresso", tone: "writer" },
   { label: "Pirate with startup ideas", tone: "oddity" },
   { label: "Stereotypical Italian man", tone: "stereotype" },
@@ -416,7 +417,7 @@ function LanguageCombobox({
 
 export default function HomePage() {
   const [sourceInput, setSourceInput] = useState("Detect language");
-  const [targetInput, setTargetInput] = useState("Sentient toaster");
+  const [targetInput, setTargetInput] = useState("Garry Tan");
   const [sourceText, setSourceText] = useState("");
   const [status, setStatus] = useState(createStatus("Ready when you are."));
 
